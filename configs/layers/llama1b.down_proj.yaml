@@ -1,0 +1,28 @@
+network_name: "llama1b"
+layer_name: "down_proj"
+in_f: 8192
+out_f: 2048
+blast:
+  b: 16
+  rank: 768
+  compile: True
+monarch:
+  b: 16
+  rank: 768
+low_rank:
+  rank: 768
+
+triton_blast_verify:
+  funcs:
+    - triton_funcs.blast_kernels.triton_blast_partial_grouped_fp32
+    - triton_funcs.blast_kernels.triton_blast_partial_grouped_persistent_fp32
+    - triton_funcs.blast_kernels.triton_blast_bmm_fp32
+triton_blast_benchmark:
+  funcs:
+    - triton_funcs.blast_kernels.triton_blast_partial_grouped_fp16
+    - triton_funcs.blast_kernels.triton_blast_partial_grouped_persistent_fp16
+    - triton_funcs.blast_kernels.triton_blast_bmm_fp16
+  profile:
+    - True
+    - True
+    - True

@@ -1,0 +1,54 @@
+triton_blast_sym_quant_benchmark:
+  funcs:
+    - triton_funcs.blast_sym_quant_kernels.triton_blast_bmm_int8_fp16
+  profile:
+    - True
+triton_blast_verify:
+  funcs:
+    - triton_funcs.blast_kernels.triton_blast_partial_grouped_fp32
+    - triton_funcs.blast_kernels.triton_blast_partial_fp32
+    - triton_funcs.blast_kernels.triton_blast_partial_grouped_persistent_fp32
+    - triton_funcs.blast_kernels.triton_blast_bmm_fp32
+triton_blast_benchmark:
+  funcs:
+    - triton_funcs.blast_kernels.triton_blast_partial_grouped_fp16
+    - triton_funcs.blast_kernels.triton_blast_partial_fp16
+    - triton_funcs.blast_kernels.triton_blast_partial_grouped_persistent_fp16
+    - triton_funcs.blast_kernels.triton_blast_bmm_fp16
+  profile:
+    - True
+    - True
+    - True
+    - True
+triton_monarch_verify: 
+  funcs:
+    - triton_funcs.monarch_kernels.triton_monarch_right_fp32
+    - triton_funcs.monarch_kernels.triton_monarch_right_left_fp32
+triton_monarch_benchmark: 
+  funcs:
+    - triton_funcs.monarch_kernels.triton_monarch_right_fp16
+    - triton_funcs.monarch_kernels.triton_monarch_right_left_fp16
+  profile:
+    - True
+    - True
+torch_blast:
+  funcs: torch_funcs.blast_funcs.torch_blast_baseline
+  profile: True
+  compile: True
+torch_monarch: 
+  funcs: torch_funcs.monarch_funcs.torch_monarch_baseline
+  profile: True
+  compile: False
+torch_low_rank: 
+  funcs: torch_funcs.low_rank_funcs.torch_low_rank_baseline
+  profile: True
+  compile: False
+torch_dense: 
+  funcs: torch_funcs.dense_funcs.torch_dense_baseline
+  profile: True
+  compile: False
+
+num_seq: 1024
+num_batches: 1
+device_name: "A40"
+#device_name: "Jetson Orin Nano 8GB"

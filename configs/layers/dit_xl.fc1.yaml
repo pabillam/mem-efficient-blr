@@ -1,0 +1,26 @@
+num_seq: 16384
+network_name: "dit_xl"
+layer_name: "fc1"
+in_f: 1152
+out_f: 4608
+blast:
+  b: 9
+  rank: 256
+  compile: True
+low_rank:
+  rank: 256
+
+triton_blast_verify:
+  funcs:
+    - triton_funcs.blast_kernels.triton_blast_partial_grouped_fp32
+    - triton_funcs.blast_kernels.triton_blast_partial_grouped_persistent_fp32
+    - triton_funcs.blast_kernels.triton_blast_bmm_fp32
+triton_blast_benchmark:
+  funcs:
+    - triton_funcs.blast_kernels.triton_blast_partial_grouped_fp16
+    - triton_funcs.blast_kernels.triton_blast_partial_grouped_persistent_fp16
+    - triton_funcs.blast_kernels.triton_blast_bmm_fp16
+  profile:
+    - True
+    - True
+    - True

@@ -1,0 +1,250 @@
+name: "llama7b"
+num_seq: 1024
+
+blast:
+  self_attn.q_proj:
+    rank: 1024
+    b: 16
+    triton:
+      func: triton_funcs.blast_kernels.triton_blast_partial_grouped_fp16
+      # func: triton_funcs.blast_kernels.triton_blast_bmm_fp16
+    torch: 
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+  self_attn.k_proj:
+    rank: 1024
+    b: 16
+    triton:
+      func: triton_funcs.blast_kernels.triton_blast_partial_grouped_fp16
+      # func: triton_funcs.blast_kernels.triton_blast_bmm_fp16
+    torch: 
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+  self_attn.v_proj:
+    rank: 1024
+    b: 16
+    triton: 
+      func: triton_funcs.blast_kernels.triton_blast_partial_grouped_fp16
+      # func: triton_funcs.blast_kernels.triton_blast_bmm_fp16
+    torch: 
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+  self_attn.o_proj:
+    rank: 1024
+    b: 16
+    triton: 
+      func: triton_funcs.blast_kernels.triton_blast_partial_grouped_fp16
+      # func: triton_funcs.blast_kernels.triton_blast_bmm_fp16
+    torch: 
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+  mlp.up_proj:
+    rank: 1488
+    b: 16
+    triton: 
+      func: triton_funcs.blast_kernels.triton_blast_partial_grouped_fp16
+      # func: triton_funcs.blast_kernels.triton_blast_bmm_fp16
+    torch: 
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+  mlp.down_proj:
+    rank: 1488
+    b: 16
+    triton: 
+      func: triton_funcs.blast_kernels.triton_blast_partial_grouped_fp16
+      # func: triton_funcs.blast_kernels.triton_blast_bmm_fp16
+    torch: 
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+  mlp.gate_proj:
+    rank: 1488
+    b: 16
+    triton: 
+      func: triton_funcs.blast_kernels.triton_blast_partial_grouped_fp16
+      # func: triton_funcs.blast_kernels.triton_blast_bmm_fp16
+    torch: 
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+
+blast_sym_quant:
+  self_attn.q_proj:
+    rank: 1024
+    b: 16
+    triton:
+      func: triton_funcs.blast_sym_quant_kernels.triton_blast_bmm_int8_fp16
+    torch: 
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+  self_attn.k_proj:
+    rank: 1024
+    b: 16
+    triton:
+      func: triton_funcs.blast_sym_quant_kernels.triton_blast_bmm_int8_fp16
+    torch: 
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+  self_attn.v_proj:
+    rank: 1024
+    b: 16
+    triton: 
+      func: triton_funcs.blast_sym_quant_kernels.triton_blast_bmm_int8_fp16
+    torch: 
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+  self_attn.o_proj:
+    rank: 1024
+    b: 16
+    triton: 
+      func: triton_funcs.blast_sym_quant_kernels.triton_blast_bmm_int8_fp16
+    torch: 
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+  mlp.up_proj:
+    rank: 1488
+    b: 16
+    triton: 
+      func: triton_funcs.blast_sym_quant_kernels.triton_blast_bmm_int8_fp16
+    torch: 
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+  mlp.down_proj:
+    rank: 1488
+    b: 16
+    triton: 
+      func: triton_funcs.blast_sym_quant_kernels.triton_blast_bmm_int8_fp16
+    torch: 
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+  mlp.gate_proj:
+    rank: 1488
+    b: 16
+    triton: 
+      func: triton_funcs.blast_sym_quant_kernels.triton_blast_bmm_int8_fp16
+    torch: 
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+
+monarch:
+  self_attn.q_proj:
+    rank: 1024
+    b: 16
+    triton:
+      func: triton_funcs.monarch_kernels.triton_monarch_right_fp16
+    torch: 
+      func: torch_funcs.monarch_funcs.torch_monarch_baseline
+      compile: False
+  self_attn.k_proj:
+    rank: 1024
+    b: 16
+    triton:
+      func: triton_funcs.monarch_kernels.triton_monarch_right_fp16
+    torch: 
+      func: torch_funcs.monarch_funcs.torch_monarch_baseline
+      compile: False
+  self_attn.v_proj:
+    rank: 1024
+    b: 16
+    triton:
+      func: triton_funcs.monarch_kernels.triton_monarch_right_fp16
+    torch: 
+      func: torch_funcs.monarch_funcs.torch_monarch_baseline
+      compile: False
+  self_attn.o_proj:
+    rank: 1024
+    b: 16
+    triton:
+      func: triton_funcs.monarch_kernels.triton_monarch_right_fp16
+    torch: 
+      func: torch_funcs.monarch_funcs.torch_monarch_baseline
+      compile: False
+  mlp.up_proj:
+    rank: 1536
+    b: 16
+    triton:
+      func: triton_funcs.monarch_kernels.triton_monarch_right_ideal_fp16
+    torch: 
+      func: torch_funcs.monarch_funcs.torch_monarch_baseline
+      compile: False
+  mlp.down_proj:
+    rank: 1536
+    b: 16
+    triton: 
+      func: triton_funcs.monarch_kernels.triton_monarch_right_fp16
+    torch: 
+      func: torch_funcs.monarch_funcs.torch_monarch_baseline
+      compile: False
+  mlp.gate_proj:
+    rank: 1536
+    b: 16
+    triton:
+      func: triton_funcs.monarch_kernels.triton_monarch_right_ideal_fp16
+    torch: 
+      func: torch_funcs.monarch_funcs.torch_monarch_baseline
+      compile: False
+
+low_rank:
+  self_attn.q_proj:
+    rank: 1024
+    torch: 
+      func: torch_funcs.low_rank_funcs.torch_low_rank_baseline
+      compile: False
+  self_attn.k_proj:
+    rank: 1024
+    torch: 
+      func: torch_funcs.low_rank_funcs.torch_low_rank_baseline
+      compile: False
+  self_attn.v_proj:
+    rank: 1024
+    torch: 
+      func: torch_funcs.low_rank_funcs.torch_low_rank_baseline
+      compile: False
+  self_attn.o_proj:
+    rank: 1024
+    torch: 
+      func: torch_funcs.low_rank_funcs.torch_low_rank_baseline
+      compile: False
+  mlp.up_proj:
+    rank: 1488
+    torch: 
+      func: torch_funcs.low_rank_funcs.torch_low_rank_baseline
+      compile: False
+  mlp.down_proj:
+    rank: 1488
+    torch: 
+      func: torch_funcs.low_rank_funcs.torch_low_rank_baseline
+      compile: False
+  mlp.gate_proj:
+    rank: 1488
+    torch: 
+      func: torch_funcs.low_rank_funcs.torch_low_rank_baseline
+      compile: False
+
+dense:
+  self_attn.q_proj:
+    torch: 
+      func: torch_funcs.dense_funcs.torch_dense_baseline
+      compile: False
+  self_attn.k_proj:
+    torch: 
+      func: torch_funcs.dense_funcs.torch_dense_baseline
+      compile: False
+  self_attn.v_proj:
+    torch: 
+      func: torch_funcs.dense_funcs.torch_dense_baseline
+      compile: False
+  self_attn.o_proj:
+    torch: 
+      func: torch_funcs.dense_funcs.torch_dense_baseline
+      compile: False
+  mlp.up_proj:
+    torch: 
+      func: torch_funcs.dense_funcs.torch_dense_baseline
+      compile: False
+  mlp.down_proj:
+    torch: 
+      func: torch_funcs.dense_funcs.torch_dense_baseline
+      compile: False
+  mlp.gate_proj:
+    torch: 
+      func: torch_funcs.dense_funcs.torch_dense_baseline
+      compile: False

@@ -1,0 +1,30 @@
+network_name: "vit_b_patch16_224"
+layer_name: "mlp_fc1"
+in_f: 768
+out_f: 3072
+blast:
+  b: 3
+  rank: 128
+  compile: True
+monarch:
+  b: 4
+  rank: 128
+low_rank:
+  rank: 128
+
+triton_monarch_verify: 
+  funcs:
+    - triton_funcs.monarch_kernels.triton_monarch_right_fp32
+    - triton_funcs.monarch_kernels.triton_monarch_right_ideal_fp32
+    - triton_funcs.monarch_kernels.triton_monarch_right_left_fp32
+triton_monarch_benchmark: 
+  funcs:
+    - triton_funcs.monarch_kernels.triton_monarch_right_fp16
+    - triton_funcs.monarch_kernels.triton_monarch_right_ideal_fp16
+    - triton_funcs.monarch_kernels.triton_monarch_right_left_fp16
+  profile:
+    - True
+    - True
+    - True
+
+num_seq: 197

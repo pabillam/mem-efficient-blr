@@ -1,0 +1,15 @@
+network_name: "vit_b_patch8_224"
+layer_name: "attn_qkv"
+in_f: 768
+out_f: 2304
+blast:
+  b: 3
+  rank: 128
+  compile: True
+monarch:
+  b: 4
+  rank: 128
+low_rank:
+  rank: 128
+
+num_seq: 785

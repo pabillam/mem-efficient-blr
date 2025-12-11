@@ -1,0 +1,106 @@
+name: "vit_b_patch16_224"
+num_seq: 197
+
+blast:
+  attention.qkv.qkv:
+    rank: 128
+    b: 3
+    triton:
+      # func: triton_funcs.blast_kernels.triton_blast_partial_grouped_fp16
+      func: triton_funcs.blast_kernels.triton_blast_bmm_fp16
+    torch: 
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+  intermediate.dense:
+    rank: 128
+    b: 3
+    triton:
+      # func: triton_funcs.blast_kernels.triton_blast_partial_grouped_fp16
+      func: triton_funcs.blast_kernels.triton_blast_bmm_fp16
+    torch: 
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+  output.dense:
+    rank: 128
+    b: 3
+    triton:
+      # func: triton_funcs.blast_kernels.triton_blast_partial_grouped_fp16
+      func: triton_funcs.blast_kernels.triton_blast_bmm_fp16
+    torch: 
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+
+blast_sym_quant:
+  attention.qkv.qkv:
+    rank: 128
+    b: 3
+    triton:
+      func: triton_funcs.blast_sym_quant_kernels.triton_blast_bmm_int8_fp16
+  intermediate.dense:
+    rank: 128
+    b: 3
+    triton:
+      func: triton_funcs.blast_sym_quant_kernels.triton_blast_bmm_int8_fp16
+  output.dense:
+    rank: 128
+    b: 3
+    triton: 
+      func: triton_funcs.blast_sym_quant_kernels.triton_blast_bmm_int8_fp16
+      # func: torch_funcs.blast_funcs.torch_blast_baseline
+
+monarch:
+  attention.qkv.qkv:
+    rank: 128
+    b: 4
+    triton:
+      func: triton_funcs.monarch_kernels.triton_monarch_right_fp16
+    torch: 
+      func: torch_funcs.monarch_funcs.torch_monarch_baseline
+      compile: False
+  intermediate.dense:
+    rank: 128
+    b: 4
+    triton:
+      func: triton_funcs.monarch_kernels.triton_monarch_right_ideal_fp16
+    torch: 
+      func: torch_funcs.monarch_funcs.torch_monarch_baseline
+      compile: False
+  output.dense:
+    rank: 128
+    b: 4
+    triton: 
+      func: triton_funcs.monarch_kernels.triton_monarch_right_fp16
+    torch: 
+      func: torch_funcs.monarch_funcs.torch_monarch_baseline
+      compile: False
+
+low_rank:
+  attention.qkv.qkv:
+    rank: 128
+    torch: 
+      func: torch_funcs.low_rank_funcs.torch_low_rank_baseline
+      compile: False
+  intermediate.dense:
+    rank: 128
+    torch: 
+      func: torch_funcs.low_rank_funcs.torch_low_rank_baseline
+      compile: False
+  output.dense:
+    rank: 128
+    torch: 
+      func: torch_funcs.low_rank_funcs.torch_low_rank_baseline
+      compile: False
+
+dense:
+  attention.qkv.qkv:
+    torch: 
+      func: torch_funcs.dense_funcs.torch_dense_baseline
+      compile: False
+  intermediate.dense:
+    torch: 
+      func: torch_funcs.dense_funcs.torch_dense_baseline
+      compile: False
+  output.dense:
+    torch: 
+      func: torch_funcs.dense_funcs.torch_dense_baseline
+      compile: False

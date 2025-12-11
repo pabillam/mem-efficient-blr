@@ -1,0 +1,38 @@
+num_seq: 384
+network_name: "gpt2s"
+layer_name: "c_attn"
+in_f: 768
+out_f: 2304
+blast:
+  b: 6
+  rank: 192
+  compile: True
+monarch:
+  b: 4
+  rank: 192
+low_rank:
+  rank: 192
+
+triton_low_rank_verify: 
+  funcs:
+    - triton_funcs.low_rank_kernels.triton_low_rank_fp32
+triton_low_rank_benchmark: 
+  funcs:
+    - triton_funcs.low_rank_kernels.triton_low_rank_fp16
+  profile:
+    - True
+
+triton_blast_verify:
+  funcs:
+    - triton_funcs.blast_kernels.triton_blast_partial_grouped_fp32
+    - triton_funcs.blast_kernels.triton_blast_partial_grouped_persistent_fp32
+    - triton_funcs.blast_kernels.triton_blast_bmm_fp32
+triton_blast_benchmark:
+  funcs:
+    - triton_funcs.blast_kernels.triton_blast_partial_grouped_fp16
+    - triton_funcs.blast_kernels.triton_blast_partial_grouped_persistent_fp16
+    - triton_funcs.blast_kernels.triton_blast_bmm_fp16
+  profile:
+    - True
+    - True
+    - True

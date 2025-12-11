@@ -1,0 +1,83 @@
+name: "dit_xl"
+num_seq: 16384
+
+blast:
+  attn.qkv:
+    rank: 384
+    b: 9
+    triton:
+      # func: triton_funcs.blast_kernels.triton_blast_partial_grouped_fp16
+      func: triton_funcs.blast_kernels.triton_blast_bmm_fp16
+    torch: 
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+  mlp.fc1:
+    rank: 256
+    b: 9
+    triton:
+      # func: triton_funcs.blast_kernels.triton_blast_partial_grouped_fp16
+      func: triton_funcs.blast_kernels.triton_blast_bmm_fp16
+    torch: 
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+  adaLN_modulation.1:
+    rank: 256
+    b: 9
+    triton:
+      # func: triton_funcs.blast_kernels.triton_blast_partial_grouped_fp16
+      # func: triton_funcs.blast_kernels.triton_blast_bmm_fp16
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+    torch: 
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+
+blast_sym_quant:
+  attn.qkv:
+    rank: 384
+    b: 9
+    triton:
+      func: triton_funcs.blast_sym_quant_kernels.triton_blast_bmm_int8_fp16
+  mlp.fc1:
+    rank: 256
+    b: 9
+    triton:
+      func: triton_funcs.blast_sym_quant_kernels.triton_blast_bmm_int8_fp16
+  adaLN_modulation.1:
+    rank: 256
+    b: 9
+    triton: 
+      # func: triton_funcs.blast_sym_quant_kernels.triton_blast_bmm_int8_fp16
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+
+low_rank:
+  attn.qkv:
+    rank: 384
+    torch: 
+      func: torch_funcs.low_rank_funcs.torch_low_rank_baseline
+      compile: False
+  mlp.fc1:
+    rank: 256
+    torch: 
+      func: torch_funcs.low_rank_funcs.torch_low_rank_baseline
+      compile: False
+  adaLN_modulation.1:
+    rank: 256
+    torch: 
+      func: torch_funcs.low_rank_funcs.torch_low_rank_baseline
+      compile: False
+
+dense:
+  attn.qkv:
+    torch: 
+      func: torch_funcs.dense_funcs.torch_dense_baseline
+      compile: False
+  mlp.fc1:
+    torch: 
+      func: torch_funcs.dense_funcs.torch_dense_baseline
+      compile: False
+  adaLN_modulation.1:
+    torch: 
+      func: torch_funcs.dense_funcs.torch_dense_baseline
+      compile: False

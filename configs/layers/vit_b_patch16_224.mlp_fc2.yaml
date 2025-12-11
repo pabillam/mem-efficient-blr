@@ -1,0 +1,15 @@
+network_name: "vit_b_patch16_224"
+layer_name: "mlp_fc2"
+in_f: 3072
+out_f: 768
+blast:
+  b: 3
+  rank: 128
+  compile: True
+monarch:
+  b: 4
+  rank: 128
+low_rank:
+  rank: 128
+
+num_seq: 197

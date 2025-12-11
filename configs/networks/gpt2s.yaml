@@ -1,0 +1,114 @@
+name: "gpt2s"
+num_seq: 384
+
+blast:
+  attn.c_attn:
+    rank: 192
+    b: 6
+    triton:
+      func: triton_funcs.blast_kernels.triton_blast_partial_grouped_fp16
+      # func: triton_funcs.blast_kernels.triton_blast_bmm_fp16
+    torch: 
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+  mlp.c_fc:
+    rank: 192
+    b: 6
+    triton:
+      func: triton_funcs.blast_kernels.triton_blast_partial_grouped_fp16
+      # func: triton_funcs.blast_kernels.triton_blast_bmm_fp16
+    torch: 
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+  mlp.c_proj:
+    rank: 192
+    b: 6
+    triton: 
+      func: triton_funcs.blast_kernels.triton_blast_partial_grouped_fp16
+      # func: triton_funcs.blast_kernels.triton_blast_bmm_fp16
+    torch: 
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+
+blast_sym_quant:
+  attn.c_attn:
+    rank: 192
+    b: 6
+    triton:
+      func: triton_funcs.blast_sym_quant_kernels.triton_blast_bmm_int8_fp16
+    torch: 
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+  mlp.c_fc:
+    rank: 192
+    b: 6
+    triton:
+      func: triton_funcs.blast_sym_quant_kernels.triton_blast_bmm_int8_fp16
+    torch: 
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+  mlp.c_proj:
+    rank: 192
+    b: 6
+    triton: 
+      func: triton_funcs.blast_sym_quant_kernels.triton_blast_bmm_int8_fp16
+    torch: 
+      func: torch_funcs.blast_funcs.torch_blast_baseline
+      compile: True
+
+monarch:
+  attn.c_attn:
+    rank: 192
+    b: 4
+    triton:
+      func: triton_funcs.monarch_kernels.triton_monarch_right_fp16
+    torch: 
+      func: torch_funcs.monarch_funcs.torch_monarch_baseline
+      compile: False
+  mlp.c_fc:
+    rank: 192
+    b: 4
+    triton:
+      func: triton_funcs.monarch_kernels.triton_monarch_right_ideal_fp16
+    torch: 
+      func: torch_funcs.monarch_funcs.torch_monarch_baseline
+      compile: False
+  mlp.c_proj:
+    rank: 192
+    b: 4
+    triton: 
+      func: triton_funcs.monarch_kernels.triton_monarch_right_fp16
+    torch: 
+      func: torch_funcs.monarch_funcs.torch_monarch_baseline
+      compile: False
+
+low_rank:
+  attn.c_attn:
+    rank: 192
+    torch: 
+      func: torch_funcs.low_rank_funcs.torch_low_rank_baseline
+      compile: False
+  mlp.c_fc:
+    rank: 192
+    torch: 
+      func: torch_funcs.low_rank_funcs.torch_low_rank_baseline
+      compile: False
+  mlp.c_proj:
+    rank: 192
+    torch: 
+      func: torch_funcs.low_rank_funcs.torch_low_rank_baseline
+      compile: False
+
+dense:
+  attn.c_attn:
+    torch: 
+      func: torch_funcs.dense_funcs.torch_dense_baseline
+      compile: False
+  mlp.c_fc:
+    torch: 
+      func: torch_funcs.dense_funcs.torch_dense_baseline
+      compile: False
+  mlp.c_proj:
+    torch: 
+      func: torch_funcs.dense_funcs.torch_dense_baseline
+      compile: False
