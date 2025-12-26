@@ -26,7 +26,7 @@ source venv/bin/activate
 With the environment active (you should see `(venv)` in your prompt), install the dependencies:
 
 ```bash
-pip install -r requirements.txt
+pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu126
 ```
 
 ## Usage and Examples
